@@ -9,4 +9,9 @@
 ## Weekly goals
 + [Week one](weekly/4_23-4_30.md)
 
+## Issues
++ https://github.com/servo/servo/issues/10778
++ https://github.com/servo/servo/issues/10851
 
+## PRs
++ https://github.com/servo/servo/pull/10873
