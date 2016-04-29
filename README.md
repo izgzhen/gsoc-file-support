@@ -1,12 +1,12 @@
-# GSOC File Support Project
+# GSoC File Support Project Meta-Tracker
 
 ## Links
 + [Servo](https://github.com/servo/servo)
-+ [libnfd](https://github.com/izgzhen/nfd/)
 + [Proposal](http://zhenzhang.me/assets/gsoc-proposal.pdf)
-+ [Original description](https://github.com/servo/servo/wiki/Summer-of-Code-2016:-File-support)
++ [Original task description](https://github.com/servo/servo/wiki/Summer-of-Code-2016:-File-support)
++ [GSoC program entry](https://summerofcode.withgoogle.com/projects/#4877001525559296)
 
-## Weekly goals
+## Weekly notes
 + [Week one](weekly/4_23-4_30.md)
 
 ## Issues
