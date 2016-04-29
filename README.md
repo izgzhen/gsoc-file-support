@@ -8,6 +8,7 @@
 
 ## Weekly notes
 + [Week one](weekly/4_23-4_30.md)
++ [Week two](weekly/5_1-5_7.md)
 
 ## Issues
 + https://github.com/servo/servo/issues/10778
