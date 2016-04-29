@@ -1,5 +1,7 @@
 Notes on Servo
-====
+===
+
+## Overview
 
 * Task-based architecture: Major components in the system should be factored into actors with isolated heaps, with clear boundaries for failure and recovery.
 * Concurrent, tiled and layered rendering.
@@ -17,7 +19,7 @@ It also manages
 * Resource loading
 * Network
 
----
+## Constellation
 
 Each constellation instance manages a pipeline of tasks that:
 
