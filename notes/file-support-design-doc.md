@@ -40,4 +40,6 @@ File reader can be either sync or async. In the async case, some event handlers 
 ## Dependencies
 1. `ArrayBuffer` and `ArrayBufferView` (Servo)
 2. `libnfd` (Library)
+3. `sequence` to `ForOf` iterator (instead of `Vec<T>`) (Servo)
+
 
