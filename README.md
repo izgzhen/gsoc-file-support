@@ -12,6 +12,7 @@
 + [Week three](weekly/5_8-5_14.md)
 
 ## Open Issues
++ [WPT test for Blob constructor has unexpected behaviour](https://github.com/servo/servo/issues/11075)
 + [Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
 + [Add file handling functionality to Blob object](https://github.com/servo/servo/issues/10851)
 + [GTK porting has errors (although working)](https://github.com/izgzhen/nfd/issues/5)
@@ -20,4 +21,7 @@
 
 ## Pending PRs
 + [Add FileManagerThread](https://github.com/servo/servo/pull/11029)
++ [Implement File DOM object interface](https://github.com/servo/servo/pull/11076)
++ [Delete outdated test cases ini, addressing issue #11075](https://github.com/servo/servo/pull/11078)
+
 

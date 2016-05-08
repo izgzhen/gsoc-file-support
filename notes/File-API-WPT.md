@@ -5,6 +5,7 @@ Current failure cases:
 
 1. `blob`
     + Construction parameter `BlobParts`
+        + The second test in `Blob-constructor.html` is rather strange...
     + Slicing doesn't work
     + Content type doesn't work
     + Blob URL is not supported
