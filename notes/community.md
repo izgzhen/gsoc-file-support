@@ -1,7 +1,9 @@
 Community
 ----
 
-Everything about living a decent life in Servo community :P
+> Everything about living a decent life in Servo community :P
+>
+> *Community* here is actually more about effective corporation, I think
 
 
 1. `r? @SomeOne`  in a comment and the reviewer gets changed
@@ -14,3 +16,9 @@ Everything about living a decent life in Servo community :P
 8. Test `.ini`s might contain out-dated specs
 9. Try to note down points of discussion on IRC
 10. With major changes to the script interface, go through the WPT tests again
+11. Avoid adding another layer of indirection (from the viewpoint of impl) if it is not necessary
+12. Changing inner interfaces might break the unit tests, use `./mach test-unit`
+13. `rebase` and `checkout` might invalidate the built packages -- cache two or more repos locally might avoid extra cost (of time)
+14. You can have multiple tracks -- Slow ones and tight ones, progressing in parallel
+15. Learn to review by yourself *effectively* first
+16. State clearly (and succinctly) your design and concern in commit message
