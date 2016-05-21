@@ -22,3 +22,5 @@ Community
 14. You can have multiple tracks -- Slow ones and tight ones, progressing in parallel
 15. Learn to review by yourself *effectively* first
 16. State clearly (and succinctly) your design and concern in commit message
+17. `derive` attributes, like `Reflectable`, might impl extra methods which are invisible in source (but visible in doc).
+
