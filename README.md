@@ -13,6 +13,7 @@
 + [Week 3](weekly/5_8-5_14.md)
 + [Week 4](weekly/5_15-5-21.md)
 + [Week 5](weekly/5_22-5_28.md)
++ [Week 6](weekly/5_29-6_4.md)
 
 ## Open Issues
 + The meta-issue: [Implement File API and related support](https://github.com/servo/servo/issues/11131)
