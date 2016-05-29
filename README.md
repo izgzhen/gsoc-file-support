@@ -20,9 +20,8 @@
 + [Add file handling functionality to Blob object](https://github.com/servo/servo/issues/10851)
 + [Implement complete set of `BlobPart` and related object construction](https://github.com/servo/servo/issues/10911)
 + [Implement Blob URLs](https://github.com/servo/servo/issues/10539)
-+ [Refused to build sometimes](https://github.com/izgzhen/libnfd/issues/6)
 + [Windows support](https://github.com/izgzhen/nfd-sys/issues/2)
-+ [scons](https://github.com/izgzhen/nfd-sys/issues/1)
+
 
 Note: Try to mention the meta one after an issue/PR is closed/merged.
 
