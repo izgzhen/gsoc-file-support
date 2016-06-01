@@ -18,14 +18,13 @@
 ## Open Issues
 + The meta-issue: [Implement File API and related support](https://github.com/servo/servo/issues/11131)
 + [Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
-+ [Add file handling functionality to Blob object](https://github.com/servo/servo/issues/10851)
 + [Implement complete set of `BlobPart` and related object construction](https://github.com/servo/servo/issues/10911)
 + [Implement Blob URLs](https://github.com/servo/servo/issues/10539)
 + [Windows support](https://github.com/izgzhen/nfd-sys/issues/2)
 
-
 Note: Try to mention the meta one after an issue/PR is closed/merged.
 
 ## Pending PRs
-* [Add file backend support for Blob and related](https://github.com/servo/servo/pull/11221)
+- [PR #11536 Add blob loader](https://github.com/servo/servo/pull/11536)
+- [PR #11534 Add Blob URL store](https://github.com/servo/servo/pull/11534)
 
