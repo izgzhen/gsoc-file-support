@@ -24,5 +24,6 @@
 + [Windows support](https://github.com/izgzhen/nfd-sys/issues/2)
 
 ## Pending PRs
-- [PR #11536 Add blob loader](https://github.com/servo/servo/pull/11536)
-- [Improve implementation and add testing regarding file manager thread #11552](https://github.com/servo/servo/pull/11552)
+- [PR #11717 Add filepicker](https://github.com/servo/servo/pull/11717)
+- [PR #11716 Implement Blob URL's DOM interfaces](https://github.com/servo/servo/pull/11716)
+- [PR #11711 Improve unit test of DataSlice](https://github.com/servo/servo/pull/11711)
