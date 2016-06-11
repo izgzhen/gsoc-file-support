@@ -16,6 +16,7 @@
 + [Week 5](weekly/5_22-5_28.md)
 + [Week 6](weekly/5_29-6_4.md)
 + [Week 7](weekly/6_5-6-11.md)
++ [Week 8](weekly/6_12-6_18.md)
 
 ## Open Issues
 + [Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
