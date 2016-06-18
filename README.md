@@ -32,6 +32,4 @@
 + [#10539 Implement Blob URLs](https://github.com/servo/servo/issues/10539)
 
 ## Pending PRs
-- [#11716 Implement Blob URL's DOM interfaces](https://github.com/servo/servo/pull/11716)
 - [#11757 Implement filter for file-type input's accept attribute](https://github.com/servo/servo/pull/11757)
-
