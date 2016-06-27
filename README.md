@@ -24,7 +24,7 @@
 + [Week 9](weekly/6_19_6-25.md)
 
 ### After Midterm
-
++ [Week 10](weekly/6_26-7_2.md)
 
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
@@ -32,4 +32,5 @@
 + [#10539 Implement Blob URLs](https://github.com/servo/servo/issues/10539)
 
 ## Pending PRs
-- [#11757 Implement filter for file-type input's accept attribute](https://github.com/servo/servo/pull/11757)
+- [add button for file-type input element #11869](https://github.com/servo/servo/pull/11869)
+- [Integration and improvements of File API backends #11875](https://github.com/servo/servo/pull/11875)

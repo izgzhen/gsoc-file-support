@@ -2,7 +2,24 @@
 
 ## Current Status
 
-The architecting work is almost done. Now we have a skeleton, and the file picker can pick some file for you now!
+### File Manager
+File manager thread will be spawned by `net` process and is mainly responsible for file ID registration. The file-picking request will also be routed to it and it will only return the filename and file id, for security considerations.
+
+### DOM API
+The API of `Blob` and `File` are much enhanced, esp. by the introduction of file-based backend. Se `BlobImpl` for further information on this.
+
+For support of Blob URL, the `URL` DOM object's two methods are implemented: `createObjectURL` and `revokeObjectURL`.
+
+For all the APIs described above, it needs to communicate with file manager thread and *delegate* some real work to it if necessary.
+
+### Input element
+The `htmlinputelement` is enhanced in several ways regarding `<input type="file">`, esp. the implementation of activation behaviour. It will get file name etc. from file manager thread, create a `File` and add it to the `FileList` attached to the element.
+
+### File-picking
+Currently, we used `tinyfiledialogs-rs` to support file picking dialog UI. Note that it doesn't support Windows and `open_file_dialog` will defaults to `None` which will be interpreted as `UserCancelled`.
+
+I also ported the [native-file-dialog](https://github.com/izgzhen/libnfd) to Rust, but it is less general than TFD. Also, TFD might be replaced by a more unified approach like [libui](https://github.com/andlabs/libui) in the future.
+
 
 ## Current Issues
 
