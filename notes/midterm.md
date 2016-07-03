@@ -1,4 +1,4 @@
-# Midterm Summary (Draft)
+# Midterm Summary
 
 ## Current Status
 
@@ -41,11 +41,15 @@ I also ported the [native-file-dialog](https://github.com/izgzhen/libnfd) to Rus
 2. `Blob.Close()`: Delete the entry if it is registered in store. Too early to do now.
 5. UI: implement the `<input type="file">` widget. Progressing it in parallel should be fine.
 
-## Future Issues (not investigated yet)
+## Related Issues
 * Interaction with XHR
+    - `xmlhttprequest.rs`
+        + `BodyInit::extract`
 * Interaction with form submission
+    - `htmlformelement.rs`:
+        + `get_form_dataset`
 
-## Blocked Issues
+## External Issues
 1. `Origin`
 2. `ArrayBuffer`
 

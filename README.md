@@ -6,9 +6,10 @@
 + [Original task description](https://github.com/servo/servo/wiki/Summer-of-Code-2016:-File-support)
 + [GSoC program entry](https://summerofcode.withgoogle.com/projects/#4877001525559296)
 + [Project Documentation](notes/file-support-design-doc.md) (WIP)
++ [Midterm Summary](notes/midterm.md)
 + [Meta Issue](https://github.com/servo/servo/issues/11131)
 
-## Weekly reports
+## This Week in File Support
 
 ### Community Bonding Period
 + [Week 1](weekly/4_23-4_30.md)
@@ -25,6 +26,7 @@
 
 ### After Midterm
 + [Week 10](weekly/6_26-7_2.md)
++ [Week 11](weekly/7_3-7_9.md)
 
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
@@ -32,5 +34,6 @@
 + [#10539 Implement Blob URLs](https://github.com/servo/servo/issues/10539)
 
 ## Pending PRs
-- [add button for file-type input element #11869](https://github.com/servo/servo/pull/11869)
 - [Integration and improvements of File API backends #11875](https://github.com/servo/servo/pull/11875)
+- [Emit change event when files are selected #12196](https://github.com/servo/servo/pull/12196)
+- [Fix Blob URL origin when scheme is file #12195](https://github.com/servo/servo/pull/12195)
