@@ -35,5 +35,3 @@
 
 ## Pending PRs
 - [Integration and improvements of File API backends #11875](https://github.com/servo/servo/pull/11875)
-- [Emit change event when files are selected #12196](https://github.com/servo/servo/pull/12196)
-- [Fix Blob URL origin when scheme is file #12195](https://github.com/servo/servo/pull/12195)
