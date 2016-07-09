@@ -35,4 +35,3 @@
 + [#10539 Implement Blob URLs](https://github.com/servo/servo/issues/10539)
 
 ## Pending PRs
-- [Integration and improvements of File API backends #11875](https://github.com/servo/servo/pull/11875)
