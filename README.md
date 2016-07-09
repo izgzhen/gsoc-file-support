@@ -27,6 +27,7 @@
 ### After Midterm
 + [Week 10](weekly/6_26-7_2.md)
 + [Week 11](weekly/7_3-7_9.md)
++ [Week 12](weekly/7_10-7_16.md)
 
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
