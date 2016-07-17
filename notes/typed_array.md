@@ -49,4 +49,8 @@ If your case is not covered by one of these, it is possible to write your own by
 - [webgl: Make a general way to get data from a JS array buffer view #8970](https://github.com/servo/servo/pull/8970)
 - [DataView type in WebIDL](https://github.com/servo/servo/issues/9530)
 
+## Related
++ [Implement DOMMatrix. #8509](https://github.com/servo/servo/issues/8509)
++ [Port SpiderMonkey interface object support from Gecko #5014](https://github.com/servo/servo/issues/5014)
+
 

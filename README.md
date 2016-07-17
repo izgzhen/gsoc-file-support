@@ -28,10 +28,11 @@
 + [Week 10](weekly/6_26-7_2.md)
 + [Week 11](weekly/7_3-7_9.md)
 + [Week 12](weekly/7_10-7_16.md)
++ [Week 13](weekly/7_17-7_23.md)
 
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
 + [#10911 Implement complete set of `BlobPart` and related object construction](https://github.com/servo/servo/issues/10911)
-+ [#10539 Implement Blob URLs](https://github.com/servo/servo/issues/10539)
 
 ## Pending PRs
+- [Fix Blob type-string #12400](https://github.com/servo/servo/pull/12400)
