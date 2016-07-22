@@ -1,41 +1,43 @@
 Analysis
 ====
 
-## Abstraction 
-### `net`, `net_traits` side
+In this analysis, we will focus on the reference relations and how to map implementation to specification. Thus, a lot of unrelated operations/data-structures are omitted, and `slice_pos` attribute of a reference will be implicit. Also, the resource will be an unified concept and it will always be available (as long as you have reference to it).
 
-#### `net/filemanager_thread`
+## Core Abstraction Operations
 
-1. `open_dialog`: filter list, default path === OS & User ==> `Result<Path(s)>`
-2. Exposed interfaces: `FileManagerThreadFactory`, `UIProvider`, `TFDProvider`
-3. `FileManager`: start looping, dispatch message to spawned worker threads
-    - `SelectFile(s)`
-    - `ReadFile`
-    - `PromoteMemory`
-    - `AddSlicedURLEntry`
-    - `RevokeBlobURL`
-    - `DecRef`
-    - `IncRef`
-    - `ActivateBlobURL`
+1. **construct blob $b$ with $Res$**: constructing a *readable* Blob-reference (or *bref*) $b$ to *resource* $Res$ in *state*
+1. **close blob $b$**: make bref $b$ *unreadable*
+3. **slice blob $b$ to get $b'$**: Create a new bref $b'$ referencing the same resource as of $b$ with same readability as of $b$
+4. **create url $u$ pointing to $b$**: Create a *valid* URL-reference (*uref*) to $b$
+5. **revoke url $u$**: Make $u$ *invalid*
+6. **read $b$**: Access resource through bref $b$. If $b$ is *unreadable*, then this operation will fail
+7. **load $u$**: Access resource through $u$. If $u$ is invalid, or $u$ is a valid reference to an unreadable $b$, then this operation will fail
 
-#### `net_traits/filemanager_thread`
-+ `FileOrigin`
-+ `RelativePos`
-+ `SelectedFileId`
-+ `SelectedFile`
-+ `FilterPattern`
-+ `FileManagerThreadMsg`
+![](abs.jpeg)
 
-#### `net/resource_thread`
-+ `CoreResourceManager` has a `filemanager_chan`
-    + Dispatch on `"blob"` scheme: `blob_loader::factory`
-    + Which in term calls `load_blob`
+## Core Implementation
 
-### `script` side
+### `filemanager_thread`
 
-#### `dom/blob`
-+ `FileBlob` (with cached meta-info/bytes)
-+ `BlobImpl` (`File`, `Memory`, `Sliced`)
+`FileManager`: start looping, dispatch messages to spawned worker threads, the messages:
+
+- `SelectFile(s)`
+- `ReadFile`
+- `PromoteMemory`
+- `AddSlicedURLEntry`
+- `RevokeBlobURL`
+- `DecRef`
+- `IncRef`
+- `ActivateBlobURL`
+
+### `resource_thread`
+`CoreResourceManager` has a `filemanager_chan`, and it will dispatch load request to handler `load_blob` from `blob_loader::factory` when called on `"blob"` scheme.
+
+### `blob`
++ `enum BlobImpl`
+    - `File(id)`
+    - `Memory(bytes)`
+    - `Sliced(JS<Blob>)`
 + `Blob`
     + DOM interfaces
     + Internal methods
@@ -45,77 +47,33 @@ Analysis
         + `create_sliced_url_id`
         + `clean_up_file_resource`
 
-#### `dom/file`
-Some constructors, not very important
+### `htmlinputelement`
+Select files and create `File` DOM object(s) accessible from script.
 
-#### `dom/htmlinputelement`
-Select files and create `File` DOM object(s) accessible from script
+### `dom/url.rs`
++ `URL::createObjectURL`
++ `URL::revokeObjectURL`
 
+![](impl.jpeg)
 
-#### `dom/url.rs`
-+ `createObjectURL`
-+ `revokeObjectURL`
+## Mappings
+1. bref $b$: `Blob` + `FileStoreEntry`
+2. uref $u$: `Url`
+3. state $S$: `FileManagerStore` + heap
+4. construct blob:
+    - `Blob::new_from_file`
+    - `Blob::new_from_bytes`
+5. close blob: `Blob::Close`
+6. slice blob: `Blob::new_sliced`
+7. create uref $u$: `URL::createObjectURL`
+8. revoke uref $u$: `URL::revokeObjectURL`
+8. read: `FileReader::read`
+9. load: `blob_loader::load_blob`
+10. readability: `blob.closed`
+11. validity: *good* `id` and `entry.is_valid_url`
+12. resource: `Vec<u8>` + `FileMetaData`
 
-## Properties
-
-### General ones
-
-1. Refcount --> correctness of lifetime & accessibility
-2. Slice --> effects on the refcount, and is slicing itself right
-
-
-### Spec Map
-> A Blob object refers to a byte sequence, and has a size attribute which is the total number of bytes in the byte sequence, and a type attribute, which is an ASCII-encoded string in lower case representing the media type of the byte sequence.
-
-+ Is `size` attr the total # of bytes?
-+ Does `type` represent the media type?
-
-> A Blob is said to be closed if its close() method has been called
-
-> The slice() method returns a new Blob object with bytes ranging from the optional start parameter upto but not including the optional end parameter, and with a type attribute that is the value of the optional contentType parameter.
-
-> S has a readability state equal to that of O’s readability state.
-
-> Note: The readability state of the context object is retained by the Blob object returned by the slice() call; this has implications on whether the returned Blob is actually usable for read operations or as a Blob URL.
-
-> If the context object has an entry in the Blob URL Store, remove the entry that corresponds to the context object.
-
-> Note: The algorithm assumes that invoking methods have checked for readability state. A Blob in the CLOSED state must not have a read operation called on it.
-
-> Responses that do not succeed with a 200 OK act as if a network error has occurred. Network errors are used when:
-> The Blob URL does not have an entry in the Blob URL Store.
-> The Blob has been closed; this also results in the Blob URL not having an entry in the Blob URL Store.
-
-
->  Revocation of a Blob URL decouples the Blob URL from the resource it refers to, and if it is dereferenced after it is revoked, user agents must act as if a network error has occurred
-
-> If called with a Blob argument that has a readability state of CLOSED, user agents must return the output of the Unicode Serialization of a Blob URL.
-
-> Add an entry to the Blob URL Store for url and blob.
-
-
-> If the url refers to a Blob that has a readability state of CLOSED OR if the value provided for the url argument is not a Blob URL, OR if the value provided for the url argument does not have an entry in the Blob URL Store, this method call does nothing. User agents may display a message on the error console.
-
-> Otherwise, user agents must remove the entry from the Blob URL Store for url.
-
-> A global object which exposes URL.createObjectURL() or URL.createFor() must maintain a Blob URL Store which is a list of Blob URLs created by the URL.createObjectURL() method or the URL.createFor() method, and the Blob resource that each refers to.
-
-> When this specification says to add an entry to the Blob URL Store for a Blob URL and a Blob input, the user-agent must add the Blob URL and a reference to the Blob it refers to to the Blob URL Store.
-
-> When this specification says to remove an entry from the Blob URL Store for a given Blob URL or for a given Blob, user agents must remove the Blob URL and the Blob it refers to from the Blob URL Store. Subsequent attempts to dereference this URL must result in a network error.
-
-
-### Core
-
-1. `new Blob()`: a *readable* Blob-reference (bref) to *resource* in *system*
-1. `Blob.close()`: make bref *unreadable*
-3. `Blob.slice()`: Create a new bref to *resource* with same readability as parent bref
-4. `URL.createObjectURL()`: Create a *valid* URL-reference (uref) to *Blob*
-5. `URL.revokeObjectURL()`: Make uref *invalid*
-6. `FileReader.read()`: Access resource through bref; If bref $b$ is unreadable, then `read` $b$ will fail
-7. `Global.load()`: Access resource through uref; If uref $u$ is invalid, or $u$ is a valid reference to an unreadable $b$, then `load` $u$ will fail
-
-### Simplified Model of Current Impl
+## Informal Reasoning
 #### Theorem #1: After `b.Close()`, $b$ is *unreadable*, and uref $u$ points to $b$ is *invalid* uref.
 
 Proof: If `b.closed == true`, then it *must* been closed in the past, and because we don't have a method to revert this operation, thus `b.closed` should stay `true` once set. Then apply lemma #1.1. QED.
@@ -168,20 +126,51 @@ Proof: In our implementation, $u \rightarrow b$ means `u.id` is a *good* id, whi
 Thus, by calling `dec_ref` with `unset_url_validity = true`, then `validity` will be set to `false`. Now by lifting the validity bit to the abstract reference edge, we close the proof.
 
 
+## Misc
 
-#### Mappings
-1. bref -> Blob + FSE
-2. uref -> Url
-3. S -> fmstore + heap
-4. new Blob ->
-    - `Blob::new_from_file`
-    - `Blob::new_from_bytes`
-5. Close blob -> `Blob::Close`
-6. Slice blob -> `Blob::new_sliced`
-7. URL: same names
-8. read: `FileReader::read`
-9. load: `blob_loader::load_blob`
-10. readable reference edge: `blob.closed`
-11. valid reference edge: good `id` + `entry.is_valid_url`
-12. Resource: Mem + FileMeta
+### Spec says
+What is a blob:
 
+> A Blob object refers to a byte sequence, and has a size attribute which is the total number of bytes in the byte sequence, and a type attribute, which is an ASCII-encoded string in lower case representing the media type of the byte sequence.
+
+Close blob:
+
+> A Blob is said to be closed if its `close()` method has been called
+
+Slice blob:
+
+> The `slice()` method returns a new Blob object with bytes ranging from the optional start parameter up to but not including the optional end parameter, and with a type attribute that is the value of the optional contentType parameter.
+
+> S has a readability state equal to that of O’s readability state.
+
+> Note: The readability state of the context object is retained by the Blob object returned by the `slice()` call; this has implications on whether the returned Blob is actually usable for read operations or as a Blob URL.
+
+
+load:
+
+> Note: The algorithm assumes that invoking methods have checked for readability state. A Blob in the CLOSED state must not have a read operation called on it.
+
+> Responses that do not succeed with a 200 OK act as if a network error has occurred. Network errors are used when:
+> The Blob URL does not have an entry in the Blob URL Store.
+> The Blob has been closed; this also results in the Blob URL not having an entry in the Blob URL Store.
+
+create uref:
+
+> If called with a Blob argument that has a readability state of CLOSED, user agents must return the output of the Unicode Serialization of a Blob URL.
+
+> Add an entry to the Blob URL Store for url and blob.
+
+
+> If the url refers to a Blob that has a readability state of CLOSED OR if the value provided for the url argument is not a Blob URL, OR if the value provided for the url argument does not have an entry in the Blob URL Store, this method call does nothing. User agents may display a message on the error console.
+
+> A global object which exposes `URL.createObjectURL()` or `URL.createFor()` must maintain a Blob URL Store which is a list of Blob URLs created by the `URL.createObjectURL()` method or the `URL.createFor()` method, and the Blob resource that each refers to.
+
+> When this specification says to add an entry to the Blob URL Store for a Blob URL and a Blob input, the user-agent must add the Blob URL and a reference to the Blob it refers to to the Blob URL Store.
+
+revoke uref:
+
+> If the context object has an entry in the Blob URL Store, remove the entry that corresponds to the context object.
+
+>  Revocation of a Blob URL decouples the Blob URL from the resource it refers to, and if it is dereferenced after it is revoked, user agents must act as if a network error has occurred
+
+> When this specification says to remove an entry from the Blob URL Store for a given Blob URL or for a given Blob, user agents must remove the Blob URL and the Blob it refers to from the Blob URL Store. Subsequent attempts to dereference this URL must result in a network error.
