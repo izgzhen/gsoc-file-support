@@ -29,10 +29,12 @@
 + [Week 11](weekly/7_3-7_9.md)
 + [Week 12](weekly/7_10-7_16.md)
 + [Week 13](weekly/7_17-7_23.md)
++ [Week 14](weekly/7_24-7_30.md)
 
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
 + [#10911 Implement complete set of `BlobPart` and related object construction](https://github.com/servo/servo/issues/10911)
 
 ## Pending PRs
-- [Fix Blob type-string #12400](https://github.com/servo/servo/pull/12400)
+- [Add form submission for file type input and related fixings #12536](https://github.com/servo/servo/pull/12536)
+- [Chunked ReadFile from file manager #12577](https://github.com/servo/servo/pull/12577)
