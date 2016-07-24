@@ -103,9 +103,9 @@ The point is that after `slice` happened and at that time real parent $b$ (which
 
 1. $b$ is file-based at the time of `slice`: In this case, whenever we `createObjectURL` for $b'$, we will `create_sliced_url_id`, which will create a reference on the fm side and `inc_ref` on it to ensure a correct lifetime (XXX: necessary?), then since this entry has its own `is_valid_url` bit, and we only check validity of the outmost entry in `try_read_file`, thus it is correct.
 2. mem-based $b$ gets promoted after `slice`
-    * it is promoted before we `createObjectURL` on $b'$:
-        + (XXX: potential bug here, I guess we should say, as long as FileID is held in some filed-based blob on the script side, then we can be sure that the reference is at least one thus the entry is intact for indirect accessing from child-blob whether or not we revoke the validity of such id) we should ensure that the new id will consider script-side references, and the validity of id should not be easily compromised.
-    + It is promoted indirectly
+    * it is promoted after we `createObjectURL` on $b'$:
+        + In this case, it means that while relation $b' \rightarrow b$ holds, the implementation of $b$ changed (because someone `createObjectURL` on it as well). Then, we revoke it. But $b$ is not the only source of referencing to the resource! As far as I can see, the problem is that, the referencing relationship on the `script` side is explicit (`JS<T>` managed, i.e. GC'd), while the referencing relationship on the `net` side is implicit (manually maintained ref-count), and in this case, basically we should have a way of cast from explicit one to implicit one. (XXX: so there might be a bug in current implementation). So a potential solution is let `dec_ref` only happens at the time of `Drop`, while `revoke` just the validity at the time of `revokeObjectURL`.
+    + It is promoted indirectly just at the time we `createObjectURL` on $b'$:
         + In this case, we will create references on fm side, which should be correct
 
 
@@ -124,6 +124,43 @@ Proof: Case analysis on $b$,
 Proof: In our implementation, $u \rightarrow b$ means `u.id` is a *good* id, which is mapped to a FSE with validity bit set.
 
 Thus, by calling `dec_ref` with `unset_url_validity = true`, then `validity` will be set to `false`. Now by lifting the validity bit to the abstract reference edge, we close the proof.
+
+## More Formal Reasoning
+### Starting from user's perspective...
+
+Define $S \vDash \text{loadable}(u, r)$ as $$S \vDash \texttt{load}(u) \{ res.\text{isResponseOf}(res, r) \}$$.
+
+Define $S \vDash \text{readable}(b, r)$ as $$ \exists l.S(l) \mapsto b\wedge S \vDash \texttt{read}(b) \{ bytes.\text{isBytesOf}(bytes, r)\}$$
+
+
+Then, constructions:
+
+Select file:
+
+$$\{ S \vDash \text{isValidPath}(p, r) \} \texttt{new_from_selected}(p) \{ b.\exists fresh(l). S [l \mapsto b] \vDash \text{readable}(b, r)\}$$
+
+Construct from bytes:
+
+$$ \{ \text{isBytesOf}(bytes, r) \} \texttt{new_from_bytes}(bytes) \{ b.\exists fresh(l). S [l \mapsto b] \vDash\text{readable}(b, r) \}$$
+
+Close: $$\exists l.\{ S(l) \mapsto b\}\texttt{close}(b) \{ S[l \mapsto b'] \vDash \forall r, \neg readable(b', r)\}$$
+
+Slice: $$\{ S \vDash \text{readable}(b, r)\} \texttt{slice}(b) \{ b'. \exists fresh(l). S [l \mapsto b'] \vDash \text{readable}(b', r)\}$$
+
+Create URL: $$\{ S \vDash readable(b, r)\}\texttt{createURL}(b) \{ u.S \vDash loadable(u, r) \}$$
+
+Revoke URL: $$\texttt{revokeURL}(u) \{ \forall r, \neg S \vDash loadable(u, r) \}$$
+
+### Some key invariants
+Define $NoLeak(S)$ as $\forall id.(\exists e. S \vDash id \leadsto e) \iff (\exists o.Owns(o, id))$.
+
+Here, the $o$ might be sliced `FileStoreEntry`, `BlobImpl::File` blob, or user (URL). Apparently, the first two are countable, so we account them in `refs` field of `e` (`FileStoreEntry`), and the last one is uncountable, so we reflect this in `is_valid_url` field.
+
+Thus, we have: $$\forall e, id. (S \vDash id \leadsto e) \rightarrow (e.refs = \#b.FileBased(b, id) + \#e'.(\exists id', S\vDash id' \leadsto e' \wedge Sliced(e', id)))$$
+
+and $$S \vDash Owns(o, id) = (\exists b. S \vDash BlobOwner(b, o) \wedge FileBased(b, id))\vee (\exists e.EntryOwner(e, o) \wedge S \vDash Sliced(e, id)) \vee (\exists u.URLOwner(u, o) \wedge (\exists r.S \vDash loadable(u, r)))$$
+
+TODO: Now it should be relatively easy to further verify against the implementation.
 
 
 ## Misc
