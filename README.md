@@ -30,6 +30,7 @@
 + [Week 12](weekly/7_10-7_16.md)
 + [Week 13](weekly/7_17-7_23.md)
 + [Week 14](weekly/7_24-7_30.md)
++ [Week 15](weekly/7_31-8_6.md)
 
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
@@ -37,4 +38,6 @@
 
 ## Pending PRs
 - [Add form submission for file type input and related fixings #12536](https://github.com/servo/servo/pull/12536)
-- [Chunked ReadFile from file manager #12577](https://github.com/servo/servo/pull/12577)
+- [Fix FileAPI's refcount implementation #12579](https://github.com/servo/servo/pull/12579)
+- [Update FileAPI WPT idlharness #12662](https://github.com/servo/servo/pull/12662)
+- [Add FileReaderSync skeleton #12663](https://github.com/servo/servo/pull/12663)
