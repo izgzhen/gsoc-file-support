@@ -32,12 +32,11 @@
 + [Week 14](weekly/7_24-7_30.md)
 + [Week 15](weekly/7_31-8_6.md)
 
+### Final weeks
+* [Final weeks](weekly/final.md)
+
 ## Open Issues
 + [#10778 Pass the FileAPI test suite](https://github.com/servo/servo/issues/10778)
 + [#10911 Implement complete set of `BlobPart` and related object construction](https://github.com/servo/servo/issues/10911)
 
 ## Pending PRs
-- [Add form submission for file type input and related fixings #12536](https://github.com/servo/servo/pull/12536)
-- [Fix FileAPI's refcount implementation #12579](https://github.com/servo/servo/pull/12579)
-- [Update FileAPI WPT idlharness #12662](https://github.com/servo/servo/pull/12662)
-- [Add FileReaderSync skeleton #12663](https://github.com/servo/servo/pull/12663)
